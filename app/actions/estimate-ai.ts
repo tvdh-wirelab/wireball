@@ -34,7 +34,7 @@ export async function generateEstimateFromBrief(brief: string): Promise<{ produc
 
   try {
     const { object } = await generateObject({
-      model: google("models/gemini-pro", {
+      model: google("gemini-pro", {
         // Accept either env-var name
         apiKey: process.env.GOOGLE_API_KEY ?? process.env.GOOGLE_GENERATIVE_AI_API_KEY,
       }),
