@@ -8,12 +8,15 @@
     "start": "next start"
   },
   "dependencies": {
+    "@ai-sdk/google": "latest",
+    "@ai-sdk/openai": "^0.1.0",
     "@radix-ui/react-dialog": "^1.0.2",
     "@radix-ui/react-label": "^1.0.2",
     "@radix-ui/react-select": "^1.0.2",
     "@radix-ui/react-separator": "^1.0.2",
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-tooltip": "^1.0.2",
+    "ai": "latest",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^0.454.0",
@@ -21,7 +24,8 @@
     "react": "^19",
     "react-dom": "^19",
     "tailwind-merge": "^2.5.5",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@types/node": "^22",

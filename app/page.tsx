@@ -7,7 +7,6 @@ import {
   fetchProductsFromHubSpot,
   sendEstimateToHubSpot,
   HOURLY_RATE,
-  // Removed saveCustomProductsToLocalStorage as custom products will not be persisted
 } from "@/lib/api-mock"
 import { ProductSelection } from "@/components/product-selection"
 import { EstimateSummary } from "@/components/estimate-summary"
@@ -26,7 +25,6 @@ export default function ProjectCostEstimator() {
     const loadAllProducts = async () => {
       setIsFetchingProducts(true)
       try {
-        // fetchProductsFromHubSpot no longer loads custom products from local storage
         const mockProducts = await fetchProductsFromHubSpot()
         setAvailableProducts(mockProducts)
       } catch (error) {
@@ -85,11 +83,6 @@ export default function ProjectCostEstimator() {
       const updatedProducts = prevProducts.map((product) =>
         product.id === productId ? { ...product, defaultHours: newHours } : product,
       )
-
-      // Removed saving custom products to local storage
-      // const updatedCustomProducts = updatedProducts.filter((p) => p.isCustom)
-      // saveCustomProductsToLocalStorage(updatedCustomProducts)
-
       return updatedProducts
     })
   }
@@ -105,13 +98,19 @@ export default function ProjectCostEstimator() {
   const handleAddCustomProduct = (newProduct: Product) => {
     setAvailableProducts((prevProducts) => {
       const updatedProducts = [...prevProducts, newProduct]
-      // Removed saving custom products to local storage
-      // const customProductsToSave = updatedProducts.filter((p) => p.isCustom)
-      // saveCustomProductsToLocalStorage(customProductsToSave)
       return updatedProducts
     })
     // Automatically add the newly created custom product to the estimate
     addProductToEstimate(newProduct)
+  }
+
+  // New handler for products suggested by AI
+  const handleAddProductsFromAI = (aiProducts: Product[]) => {
+    aiProducts.forEach((product) => {
+      // Treat AI-suggested products like custom products, adding them to availableProducts
+      // and then to the estimate. The `handleAddCustomProduct` already does this.
+      handleAddCustomProduct(product)
+    })
   }
 
   const grandTotal = estimateItems.reduce((sum, item) => sum + item.subtotal, 0)
@@ -155,11 +154,10 @@ export default function ProjectCostEstimator() {
           isLoading={isFetchingProducts}
           addedProductIds={new Set(estimateItems.map((item) => item.productId))}
           onUpdateProductDefaultHours={updateProductDefaultHours}
-          onAddCustomProduct={handleAddCustomProduct} // Pass the new handler
+          onAddCustomProduct={handleAddCustomProduct}
+          onAddProductsFromAI={handleAddProductsFromAI}
         />
         <div className="flex flex-col h-full">
-          {" "}
-          {/* This column now takes full height */}
           <EstimateSummary
             estimateItems={estimateItems}
             onUpdateHours={updateEstimateItemHours}

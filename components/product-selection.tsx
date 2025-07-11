@@ -5,12 +5,13 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Search, HelpCircle } from "lucide-react" // Import HelpCircle icon
+import { Search, HelpCircle } from "lucide-react"
 import type { Product } from "@/lib/api-mock"
 import { Skeleton } from "@/components/ui/skeleton"
-import { HOURLY_RATE } from "@/lib/api-mock" // Import HOURLY_RATE
-import { AddCustomProductDialog } from "./add-custom-product-dialog" // Import the new component
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip" // Import Tooltip components
+import { HOURLY_RATE } from "@/lib/api-mock"
+import { AddCustomProductDialog } from "./add-custom-product-dialog"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { AIEstimatorDialog } from "./ai-estimator-dialog" // New import
 
 interface ProductSelectionProps {
   products: Product[]
@@ -18,7 +19,8 @@ interface ProductSelectionProps {
   isLoading: boolean
   addedProductIds: Set<string>
   onUpdateProductDefaultHours: (productId: string, hours: number) => void
-  onAddCustomProduct: (product: Product) => void // New prop for custom products
+  onAddCustomProduct: (product: Product) => void
+  onAddProductsFromAI: (products: Product[]) => void // New prop for AI products
 }
 
 export function ProductSelection({
@@ -27,7 +29,8 @@ export function ProductSelection({
   isLoading,
   addedProductIds,
   onUpdateProductDefaultHours,
-  onAddCustomProduct, // Destructure new prop
+  onAddCustomProduct,
+  onAddProductsFromAI, // Destructure new prop
 }: ProductSelectionProps) {
   const [searchTerm, setSearchTerm] = React.useState("")
 
@@ -80,8 +83,11 @@ export function ProductSelection({
           />
           <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         </div>
-        <div className="mt-4">
+        <div className="mt-4 flex gap-2">
+          {" "}
+          {/* Use flex to align buttons */}
           <AddCustomProductDialog onAddCustomProduct={onAddCustomProduct} />
+          <AIEstimatorDialog onAddProducts={onAddProductsFromAI} /> {/* Add AI Estimator button */}
         </div>
       </CardHeader>
       <CardContent className="flex-1 overflow-auto p-4 grid gap-4 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
