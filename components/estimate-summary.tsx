@@ -43,7 +43,9 @@ export function EstimateSummary({ estimateItems, onUpdateHours, onRemoveItem }: 
   const sortedCategories = React.useMemo(() => Object.keys(groupedEstimateItems).sort(), [groupedEstimateItems])
 
   return (
-    <Card className="flex flex-col flex-grow">
+    <Card className="flex flex-col h-[400px]">
+      {" "}
+      {/* Changed from flex-grow to fixed height */}
       <CardHeader>
         <CardTitle>Estimate Summary</CardTitle>
         <CardDescription>Review and adjust your selected products.</CardDescription>

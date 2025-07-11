@@ -11,7 +11,8 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { HOURLY_RATE } from "@/lib/api-mock"
 import { AddCustomProductDialog } from "./add-custom-product-dialog"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import { AIEstimatorDialog } from "./ai-estimator-dialog" // New import
+import { AIEstimatorDialog } from "./ai-estimator-dialog"
+import { cn } from "@/lib/utils"
 
 interface ProductSelectionProps {
   products: Product[]
@@ -20,7 +21,8 @@ interface ProductSelectionProps {
   addedProductIds: Set<string>
   onUpdateProductDefaultHours: (productId: string, hours: number) => void
   onAddCustomProduct: (product: Product) => void
-  onAddProductsFromAI: (products: Product[]) => void // New prop for AI products
+  onAddProductsFromAI: (products: Product[]) => void
+  className?: string
 }
 
 export function ProductSelection({
@@ -30,7 +32,8 @@ export function ProductSelection({
   addedProductIds,
   onUpdateProductDefaultHours,
   onAddCustomProduct,
-  onAddProductsFromAI, // Destructure new prop
+  onAddProductsFromAI,
+  className,
 }: ProductSelectionProps) {
   const [searchTerm, setSearchTerm] = React.useState("")
 
@@ -66,7 +69,7 @@ export function ProductSelection({
   }
 
   return (
-    <Card className="h-full flex flex-col">
+    <Card className={cn("h-full flex flex-col", className)}>
       <CardHeader>
         <CardTitle>Product Library</CardTitle>
         <CardDescription>Select products to add to your estimate.</CardDescription>
@@ -84,13 +87,13 @@ export function ProductSelection({
           <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         </div>
         <div className="mt-4 flex gap-2">
-          {" "}
-          {/* Use flex to align buttons */}
           <AddCustomProductDialog onAddCustomProduct={onAddCustomProduct} />
-          <AIEstimatorDialog onAddProducts={onAddProductsFromAI} /> {/* Add AI Estimator button */}
+          <AIEstimatorDialog onAddProducts={onAddProductsFromAI} />
         </div>
       </CardHeader>
-      <CardContent className="flex-1 overflow-auto p-4 grid gap-4 md:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+      <CardContent className="flex-1 overflow-auto p-4 grid gap-4 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3">
+        {" "}
+        {/* Updated grid columns */}
         {isLoading ? (
           Array.from({ length: 6 }).map((_, i) => (
             <div key={i} className="flex flex-col space-y-3">
@@ -105,8 +108,6 @@ export function ProductSelection({
           <p className="text-muted-foreground col-span-full text-center py-8">No products found.</p>
         ) : (
           <TooltipProvider delayDuration={0}>
-            {" "}
-            {/* Wrap with TooltipProvider */}
             {sortedCategories.map((category) => (
               <React.Fragment key={category}>
                 <h3 className="text-lg font-semibold mt-4 mb-2 col-span-full">{category}</h3>
@@ -117,10 +118,8 @@ export function ProductSelection({
                       <CardHeader className="pb-2">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
-                            {" "}
-                            {/* Flex container for title and icon */}
                             <CardTitle className="text-lg">{product.name}</CardTitle>
-                            {product.description && ( // Conditionally render icon if description exists
+                            {product.description && (
                               <Tooltip>
                                 <TooltipTrigger asChild>
                                   <Button variant="ghost" size="icon" className="h-6 w-6">
@@ -148,7 +147,7 @@ export function ProductSelection({
                             type="number"
                             value={product.defaultHours}
                             onChange={(e) => handleDefaultHoursChange(product.id, e)}
-                            className="w-20 h-9 text-right pr-6" // Adjusted width and added padding-right
+                            className="w-20 h-9 text-right pr-6"
                             min="0"
                             aria-label={`Default hours for ${product.name}`}
                           />

@@ -147,7 +147,9 @@ export default function ProjectCostEstimator() {
 
   return (
     <div className="flex flex-1 flex-col p-4 md:p-6">
-      <div className="grid gap-6 lg:grid-cols-2 h-full">
+      <div className="grid gap-6 lg:grid-cols-3">
+        {" "}
+        {/* Changed to lg:grid-cols-3 */}
         <ProductSelection
           products={availableProducts}
           onAddProduct={addProductToEstimate}
@@ -156,8 +158,11 @@ export default function ProjectCostEstimator() {
           onUpdateProductDefaultHours={updateProductDefaultHours}
           onAddCustomProduct={handleAddCustomProduct}
           onAddProductsFromAI={handleAddProductsFromAI}
+          className="lg:col-span-2"
         />
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col lg:col-span-1">
+          {" "}
+          {/* Added col-span-1 */}
           <EstimateSummary
             estimateItems={estimateItems}
             onUpdateHours={updateEstimateItemHours}
